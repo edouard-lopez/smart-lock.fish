@@ -1,4 +1,4 @@
-# smart-lock.fish
+# smart-lock.fish [![ci-status]][ci-link] ![fish-4] ![fish-3] [![sponsors]][sponsor-link] <!-- 0 width spaces on this line -->
 
 > Automatically locks or unlocks the screen based on proximity to trusted devices (Wi-Fi, Bluetooth).
 
@@ -154,3 +154,12 @@ cp $__fish_config_dir/functions/{__smart_lock_,}fish_right_prompt.fish
 ```
 
 </details>
+
+[ci-link]: <https://github.com/edouard-lopez/smart-lock.fish/actions> "Github CI"
+[ci-status]: https://img.shields.io/github/actions/workflow/status/edouard-lopez/smart-lock.fish/.github/workflows/ci.yml?style=flat-square
+
+[fish-3]: <https://img.shields.io/badge/fish-v3-007EC7.svg?style=flat-square> "Support Fish 3"
+[fish-4]: <https://img.shields.io/badge/fish-v4-7dc600.svg?style=flat-square> "Support Fish 4"
+
+[sponsors]: https://img.shields.io/github/sponsors/edouard-lopez?label=💰&style=flat-square "GitHub Sponsors"
+[sponsor-link]: https://github.com/sponsors/edouard-lopez/ "Become a sponsor"
