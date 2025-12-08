@@ -1,10 +1,13 @@
-test "__smart_lock_get_bluetooth_device_type: not connected" \
+source functions/__smart_lock_get_bluetooth_device_type.fish
+
+@test "__smart_lock_get_bluetooth_device_type: not connected" \
     (
         function bluetoothctl; echo "Missing device"; end
         __smart_lock_get_bluetooth_device_type "00:00:00:00:00:00"
-    ) = 1
+        or echo "status_1"
+    ) = "status_1"
 
-test "__smart_lock_get_bluetooth_device_type: phone" \
+@test "__smart_lock_get_bluetooth_device_type: phone" \
     (
         function bluetoothctl
             echo "Device 00:00:00:00:00:00"
@@ -15,7 +18,7 @@ test "__smart_lock_get_bluetooth_device_type: phone" \
         __smart_lock_get_bluetooth_device_type "00:00:00:00:00:00"
     ) = "phone"
 
-test "__smart_lock_get_bluetooth_device_type: mouse" \
+@test "__smart_lock_get_bluetooth_device_type: mouse" \
     (
         function bluetoothctl
             echo "Device 00:00:00:00:00:00"
@@ -26,7 +29,7 @@ test "__smart_lock_get_bluetooth_device_type: mouse" \
         __smart_lock_get_bluetooth_device_type "00:00:00:00:00:00"
     ) = "mouse"
 
-test "__smart_lock_get_bluetooth_device_type: other" \
+@test "__smart_lock_get_bluetooth_device_type: other" \
     (
         function bluetoothctl
             echo "Device 00:00:00:00:00:00"
