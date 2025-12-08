@@ -16,8 +16,9 @@ fisher install edouard-lopez/smart-lock.fish
 ```
 
 <details>
-<summary>Requirements</summary>
+<summary>💡 Requirements</summary>
 
+* [icons-in-terminal](https://github.com/edouard-lopez/icons-in-terminal) for gray icons support (optional) ;
 * [Fisher](https://github.com/jorgebucaran/fisher) - Fish plugin manager
 * `xprintidle` - X11 idle time detection
 * `nmcli` - NetworkManager CLI for Wi-Fi detection (via `network-manager`)
@@ -32,6 +33,8 @@ apt install network-manager bluez xprintidle x11-xserver-utils cinnamon-screensa
 ```
 
 </details>
+
+<br/>
 
 **What to do after installation:**
 
