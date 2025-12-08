@@ -1,0 +1,12 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jorgebucaran/fisher@main
+      - run: fisher install jorgebucaran/fishtape
+      - run: fishtape tests/*.fish
