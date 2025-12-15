@@ -19,7 +19,6 @@
 * write tests for new features and bug fixes
 * use [clean code principles](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29#file-clean_code-md)
 * follow [Pure code style guide](./CONTRIBUTING.md)
-* use long-form options for commands to improve readability
 
 ## Documentation
 
