@@ -9,29 +9,29 @@ INTERACTIVE=true
 default: usage
 usage:
 	@printf "usage:"
-	@printf "\tmake build-smart-lock-on FISH_VERSION=3.3.1\t# build container\n"
-	@printf "\tmake test-smart-lock-on  FISH_VERSION=3.3.1\t# run tests\n"
-	@printf "\tmake dev-smart-lock-on   FISH_VERSION=3.3.1\t# dev in container\n"
+	@printf "\tmake build-project-on FISH_VERSION=3.3.1\t# build container\n"
+	@printf "\tmake test-project-on  FISH_VERSION=3.3.1\t# run tests\n"
+	@printf "\tmake dev-project-on   FISH_VERSION=3.3.1\t# dev in container\n"
 
-.PHONY: build-smart-lock-on
-build-smart-lock-on: STAGE?=with-smart-lock-installed
-build-smart-lock-on:
+.PHONY: build-project-on
+build-project-on: STAGE?=with-project-installed
+build-project-on:
 	docker build \
 		--file ./docker/Dockerfile \
 		--target ${STAGE} \
 		--build-arg FISH_VERSION=${FISH_VERSION} \
-		--tag=smart-lock-${STAGE}-${FISH_VERSION} \
+		--tag=project-${STAGE}-${FISH_VERSION} \
 		--load \
 		./
 
-.PHONY: dev-smart-lock-on
-dev-smart-lock-on: CMD?=fish
-dev-smart-lock-on: STAGE?=with-smart-lock-installed
-dev-smart-lock-on: TTY_FLAG?=$(shell [ -z "$$CI" ] && echo "--tty" || echo "")
-dev-smart-lock-on: USER_FLAG?=$(shell [ -z "$$CI" ] && echo "--user $$(id -u):$$(id -g)" || echo "")
-dev-smart-lock-on: build-with-smart-lock-installed
+.PHONY: dev-project-on
+dev-project-on: CMD?=fish
+dev-project-on: STAGE?=with-project-installed
+dev-project-on: TTY_FLAG?=$(shell [ -z "$$CI" ] && echo "--tty" || echo "")
+dev-project-on: USER_FLAG?=$(shell [ -z "$$CI" ] && echo "--user $$(id -u):$$(id -g)" || echo "")
+dev-project-on: build-with-project-installed
 	docker run \
-		--name dev-smart-lock-on-${FISH_VERSION} \
+		--name dev-project-on-${FISH_VERSION} \
 		--rm \
 		--interactive \
 		$(TTY_FLAG) \
@@ -39,25 +39,25 @@ dev-smart-lock-on: build-with-smart-lock-installed
         --env HOME=/home/nemo \
         --env XDG_CONFIG_HOME=/home/nemo/.config \
         --env XDG_DATA_HOME=/home/nemo/.local/share \
-		--volume=$$(pwd):/home/nemo/.config/fish/smart-lock/ \
-		--workdir /home/nemo/.config/fish/smart-lock/ \
-		smart-lock-${STAGE}-${FISH_VERSION} "fish --version && ${CMD}"
+		--volume=$$(pwd):/home/nemo/.config/fish/project/ \
+		--workdir /home/nemo/.config/fish/project/ \
+		project-${STAGE}-${FISH_VERSION} "fish --version && ${CMD}"
 
-.PHONY: test-smart-lock-on
-test-smart-lock-on: CMD?=fishtape tests/*.test.fish
-test-smart-lock-on: STAGE?=with-smart-lock-installed
-test-smart-lock-on: build-with-smart-lock-installed
+.PHONY: test-project-on
+test-project-on: CMD?=fishtape tests/*.test.fish
+test-project-on: STAGE?=with-project-installed
+test-project-on: build-with-project-installed
 	docker run \
-		--name test-smart-lock-on-${FISH_VERSION} \
+		--name test-project-on-${FISH_VERSION} \
 		--rm \
 		--tty \
-		smart-lock-${STAGE}-${FISH_VERSION} "fish --version && ${CMD}"
+		project-${STAGE}-${FISH_VERSION} "fish --version && ${CMD}"
 
-.PHONY: build-with-smart-lock-installed
-build-with-smart-lock-installed:
-	$(MAKE) build-smart-lock-on FISH_VERSION=${FISH_VERSION} STAGE=with-smart-lock-installed
+.PHONY: build-with-project-installed
+build-with-project-installed:
+	$(MAKE) build-project-on FISH_VERSION=${FISH_VERSION} STAGE=with-project-installed
 
-.PHONY: dev-with-smart-lock-installed
-dev-with-smart-lock-installed:
-	$(MAKE) build-smart-lock-on FISH_VERSION=${FISH_VERSION} STAGE=with-smart-lock-installed
-	$(MAKE) dev-smart-lock-on FISH_VERSION=${FISH_VERSION} STAGE=with-smart-lock-installed
+.PHONY: dev-with-project-installed
+dev-with-project-installed:
+	$(MAKE) build-project-on FISH_VERSION=${FISH_VERSION} STAGE=with-project-installed
+	$(MAKE) dev-project-on FISH_VERSION=${FISH_VERSION} STAGE=with-project-installed

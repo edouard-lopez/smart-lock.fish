@@ -12,7 +12,7 @@ on:
 
 jobs:
   test-container:
-    name: Test `smart-lock` with Fish ${{ matrix.version.fish }} on Alpine
+    name: Test with Fish ${{ matrix.version.fish }} on Alpine
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,8 +37,8 @@ jobs:
         timeout-minutes: ${{ vars.TMATE_TIMEOUT && fromJSON(vars.TMATE_TIMEOUT) || 5 }}
         continue-on-error: true
 
-      - name: Build smart-lock Image on Alpine ${{ matrix.version.alpine }}
-        run: make build-smart-lock-on FISH_VERSION=${{ matrix.version.fish }}
+      - name: Build Image on Alpine ${{ matrix.version.alpine }}
+        run: make build-project-on FISH_VERSION=${{ matrix.version.fish }}
 
       - name: Run Tests
-        run: make test-smart-lock-on FISH_VERSION=${{ matrix.version.fish }}
+        run: make test-project-on FISH_VERSION=${{ matrix.version.fish }}
