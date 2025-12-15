@@ -10,7 +10,6 @@ on:
     paths:
       - "**.fish"
       - ".github/**/*.yml"
-      - "!conf.d/pure.fish"
 
   pull_request:
     types:
