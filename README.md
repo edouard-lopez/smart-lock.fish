@@ -64,9 +64,9 @@ Set environment variables to define trusted devices and idle timeout.
 Example configuration in `config.fish`:
 
 ```fish
-set --universal SMART_LOCK_BSSIDS "AA:BB:CC:DD:EE:FF" "BB:CC:DD:EE:FF:AA" 
-set --universal SMART_LOCK_DEVICES_MACS "CC:DD:EE:FF:AA:BB"
-set --universal SMART_LOCK_AFTER 300
+set --universal --export SMART_LOCK_BSSIDS "AA:BB:CC:DD:EE:FF" "BB:CC:DD:EE:FF:AA" 
+set --universal --export SMART_LOCK_DEVICES_MACS "CC:DD:EE:FF:AA:BB"
+set --universal --export SMART_LOCK_AFTER 300
 ```
 
 ## Usage
