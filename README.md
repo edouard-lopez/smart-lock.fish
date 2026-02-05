@@ -43,10 +43,10 @@ apt install network-manager bluez xprintidle x11-xserver-utils cinnamon-screensa
 
 <br/>
 
-**What to do after installation:**
+### ✅ What to do after installation
 
 * [ ] Configure the trusted  devices and idle timeout variables ;
-* [ ] Run `smart_lock_toggle` periodically (e.g., via cron or systemd timer) ;
+* [ ] Run `smart_lock_toggle` periodically (e.g., via `crom` or `systemd` timer) ;
 * [ ] Display the lock status in your prompt.
 
 ## Configuration
@@ -148,8 +148,7 @@ echo $SMART_LOCK_STATUS
 
 :information_source: If you didn't customize your `fish_right_prompt.fish`, you can use our
 
-<details>
-<summary>Install our fish_right_prompt</summary>
+### ✅ Install our fish_right_prompt
 
 Backup existing fish_right_prompt.fish
 
@@ -162,8 +161,5 @@ Replace with smart_lock version
 ```fish
 cp $__fish_config_dir/functions/{__smart_lock_,}fish_right_prompt.fish
 ```
-
-</details>
-
 
 
