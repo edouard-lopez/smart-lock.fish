@@ -25,41 +25,56 @@ fisher install edouard-lopez/smart-lock.fish
 <details>
 <summary>💡 Requirements</summary>
 
-* [icons-in-terminal](https://github.com/edouard-lopez/icons-in-terminal) for gray icons support (optional) ;
-* [Fisher](https://github.com/jorgebucaran/fisher) - Fish plugin manager
-* `xprintidle` - X11 idle time detection
-* `nmcli` - NetworkManager CLI for Wi-Fi detection (via `network-manager`)
-* `bluetoothctl` - Bluetooth device detection (via `bluez` package)
-* `cinnamon-screensaver-command` (or modify for your DE)
-* `xset`: to manage display power
+| Tool                                     | Purpose                   | Cinnamon<br>(X11) | KDE/GNOME<br>(Wayland) | KDE/GNOME<br>(X11) | Other<br>(X11) |
+| ---------------------------------------- | ------------------------- | ----------------- | ---------------------- | ------------------ | -------------- |
+| [`icons-in-terminal`][icons-in-terminal] | nicer icons               | ✓                 | ✓                      | ✓                  | ✓              |
+| `nmcli` (via NetworkManager)             | request network status    | ✓                 | ✓                      | ✓                  | ✓              |
+| `bluetoothctl`                           | request Bluetooth status  | ✓                 | ✓                      | ✓                  | ✓              |
+| `loginctl`                               | control lock/unlock       | ✓                 | ✓                      | ✓                  | ✓              |
+| [`xprintidle`][xprintidle]               | get/set idle time         | ✓                 | —                      | ✓                  | ✓              |
+| `xset`                                   | get/set X server settings | ✓                 | —                      | ✓                  | ✓              |
+| `cinnamon-screensaver-command`           | control lock/unlock       | ✓                 | —                      | —                  | —              |
 
-For Debian/Ubuntu-based systems:  
+[icons-in-terminal]: <https://github.com/edouard-lopez/icons-in-terminal>
+[xprintidle]: <https://github.com/g0hl1n/xprintidle>
 
+For Debian/Ubuntu-based systems (X11):  
+
+```bash
+apt install network-manager bluez xprintidle x11-xserver-utils
 ```
-apt install network-manager bluez xprintidle x11-xserver-utils cinnamon-screensaver
+
+For Fedora/RHEL-based systems with KDE/GNOME (Wayland):
+
+```bash
+dnf install NetworkManager bluez #
+```
+
+For Fedora/RHEL-based systems with X11:
+
+```bash
+dnf install NetworkManager bluez xorg-x11-server-utils xprintidle
 ```
 
 </details>
 
-<br/>
+### What to do after installation
 
-### ✅ What to do after installation
+* :one::white_check_mark: Configure the trusted  devices and idle timeout variables ;
+* :two::white_check_mark: Usage = run `smart_lock_toggle` periodically (e.g., via `systemd` timer or `cron`) ;
+* :three::white_check_mark: Display the lock status in your prompt.
 
-* [ ] Configure the trusted  devices and idle timeout variables ;
-* [ ] Run `smart_lock_toggle` periodically (e.g., via `crom` or `systemd` timer) ;
-* [ ] Display the lock status in your prompt.
-
-## Configuration
+## :one::white_check_mark: Configuration
 
 ### Trusted Devices & Idle Timeout
 
 Set environment variables to define trusted devices and idle timeout.
 
-| Variable                  | Default | Description                                   |
-| ------------------------- | ------- | --------------------------------------------- |
+| Variable                  | Default | Description                                                                    |
+| ------------------------- | ------- | ------------------------------------------------------------------------------ |
 | `SMART_LOCK_BSSIDS`       | -       | List of trusted Wi-Fi BSSIDs as MAC addresses<br>e.g. home Wi-Fi, office Wi-Fi |
-| `SMART_LOCK_DEVICES_MACS` | -       | List of trusted Bluetooth as MAC addresses<br>e.g. smartphone, mouse)  |
-| `SMART_LOCK_AFTER`        | `180`   | Idle timeout in seconds                       |
+| `SMART_LOCK_DEVICES_MACS` | -       | List of trusted Bluetooth as MAC addresses<br>e.g. smartphone, mouse)          |
+| `SMART_LOCK_AFTER`        | `180`   | Idle timeout in seconds                                                        |
 
 Example configuration in `config.fish`:
 
@@ -69,13 +84,16 @@ set --universal --export SMART_LOCK_DEVICES_MACS "CC:DD:EE:FF:AA:BB"
 set --universal --export SMART_LOCK_AFTER 300
 ```
 
-## Usage
+## :two::white_check_mark: Usage = run periodically
 
 You need to run `smart_lock_toggle` periodically to check the proximity of trusted devices to update `SMART_LOCK_STATUS` and trigger screen lock and unlock the screen accordingly.
 
-### Systemd Timer (Recommended)
+### `systemd` Timer (Recommended)
 
 Systemd handles environment variables and logging better than `cron`.
+
+<details>
+<summary>Create <code>systemd</code> service and timer</summary>
 
 #### Create a user-level systemd timer
 
@@ -115,6 +133,8 @@ WantedBy=timers.target
 systemctl --user enable --now smart-lock.timer
 ```
 
+</details>
+
 ### Crontab
 
 <details>
@@ -130,15 +150,9 @@ DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
 * * * * * fish -c 'source $__fish_config_dir/functions/smart_lock_toggle.fish && smart_lock_toggle'
 ```
 
-You can always run it manually
-
-```fish
-smart_lock_toggle
-```
-
 </details>
 
-### Finally Prompt
+## :three::white_check_mark: Finally Prompt
 
 Add the following to your prompt to show lock status:
 
@@ -146,20 +160,30 @@ Add the following to your prompt to show lock status:
 echo $SMART_LOCK_STATUS
 ```
 
-:information_source: If you didn't customize your `fish_right_prompt.fish`, you can use our
+:information_source: If you didn't customize your `fish_right_prompt.fish`, you can use ours:
+<details>
+<summary><b>💡 Install our fish_right_prompt</b></summary>
 
-### ✅ Install our fish_right_prompt
+1. Backup existing `fish_right_prompt.fish`:
 
-Backup existing fish_right_prompt.fish
+    ```fish
+    cp $__fish_config_dir/functions/{,__backup_}fish_right_prompt.fish
+    ```
+
+2. Replace with `smart_lock`'s version:
+
+    ```fish
+    cp $__fish_config_dir/functions/{__smart_lock_,}fish_right_prompt.fish
+    ```
+
+</details>
+
+## Debugging
+
+You can always run it manually with Fish debugging
 
 ```fish
-cp $__fish_config_dir/functions/{,__backup_}fish_right_prompt.fish
+set fish_trace 1
+smart_lock_toggle
+set --erase fish_trace
 ```
-
-Replace with smart_lock version
-
-```fish
-cp $__fish_config_dir/functions/{__smart_lock_,}fish_right_prompt.fish
-```
-
-
