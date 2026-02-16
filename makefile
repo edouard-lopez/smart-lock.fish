@@ -17,6 +17,8 @@ usage:
 build-project-on: STAGE?=with-project-installed
 build-project-on:
 	docker build \
+		--security-opt label=disable \
+		--security-opt seccomp=unconfined \
 		--file ./docker/Dockerfile \
 		--target ${STAGE} \
 		--build-arg FISH_VERSION=${FISH_VERSION} \
@@ -31,6 +33,8 @@ dev-project-on: TTY_FLAG?=$(shell [ -z "$$CI" ] && echo "--tty" || echo "")
 dev-project-on: USER_FLAG?=$(shell [ -z "$$CI" ] && echo "--user $$(id -u):$$(id -g)" || echo "")
 dev-project-on: build-with-project-installed
 	docker run \
+		--security-opt label=disable \
+		--security-opt seccomp=unconfined \
 		--name dev-project-on-${FISH_VERSION} \
 		--rm \
 		--interactive \
@@ -48,6 +52,8 @@ test-project-on: CMD?=fishtape tests/*.test.fish
 test-project-on: STAGE?=with-project-installed
 test-project-on: build-with-project-installed
 	docker run \
+		--security-opt label=disable \
+		--security-opt seccomp=unconfined \
 		--name test-project-on-${FISH_VERSION} \
 		--rm \
 		--tty \
